@@ -3,12 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
 
 export default function Index() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [openSpec, setOpenSpec] = useState<number | null>(null);
 
   const advantages = [
     { icon: 'Droplet', title: 'Вакуумная сушка', desc: 'Эффективная сушка инструментов за 3-5 минут' },
@@ -109,24 +109,34 @@ export default function Index() {
           <div className="max-w-4xl mx-auto">
             <Card className="shadow-lg">
               <CardContent className="p-8">
-                <Accordion type="single" collapsible className="w-full">
+                <div className="space-y-2">
                   {specs.map((spec, idx) => (
-                    <AccordionItem key={idx} value={`item-${idx}`}>
-                      <AccordionTrigger className="text-lg font-semibold">
+                    <div key={idx} className="border-b last:border-b-0">
+                      <button
+                        onClick={() => setOpenSpec(openSpec === idx ? null : idx)}
+                        className="w-full flex items-center justify-between py-4 text-lg font-semibold hover:text-accent transition-colors"
+                      >
                         {spec.param}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-base text-muted-foreground">
-                        <div className="flex items-center gap-2">
+                        <Icon 
+                          name="ChevronDown" 
+                          size={20} 
+                          className={`transition-transform duration-200 ${openSpec === idx ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+                      <div 
+                        className={`overflow-hidden transition-all duration-300 ${openSpec === idx ? 'max-h-40 pb-4' : 'max-h-0'}`}
+                      >
+                        <div className="flex items-center gap-2 text-muted-foreground">
                           <Icon name="CheckCircle" size={20} className="text-accent" />
                           <span className="font-medium">{spec.value}</span>
                         </div>
-                        <p className="mt-2 text-sm">
+                        <p className="mt-2 text-sm text-muted-foreground">
                           Соответствует всем международным стандартам качества и безопасности
                         </p>
-                      </AccordionContent>
-                    </AccordionItem>
+                      </div>
+                    </div>
                   ))}
-                </Accordion>
+                </div>
               </CardContent>
             </Card>
           </div>
